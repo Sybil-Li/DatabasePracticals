@@ -1,0 +1,5 @@
+SELECT student.sname, enroll.grade FROM student, enroll WHERE student.sid=enroll.sid AND enroll.cno = 365;
+
+SELECT count(major.sid), major.dname FROM student JOIN major ON student.sid = major.sid WHERE student.age < 20 GROUP BY major.dname;
+
+SELECT A.cno, A.sectno FROM (SELECT enroll.cno, enroll.sectno, count(enroll.sid) FROM enroll GROUP BY enroll.cno, enroll.sectno) A WHERE A.count < 10;

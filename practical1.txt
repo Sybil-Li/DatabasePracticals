@@ -1,0 +1,52 @@
+SELECT student.sname, SN.grade FROM student JOIN (SELECT E.sid, E.grade FROM enroll E JOIN (SELECT C.cno FROM course C WHERE C.cname = 'Thermodynamics') S on E.cno = S.cno) SN ON student.sid = SN.sid; 
+
+        sname        | grade 
+---------------------+-------
+ Jacobs, T.          |     3
+ Borchart, Sandra L. |     3
+ June, Granson       |     3
+ Villa-lobos, M.     |   3.5
+ Starry, J.          |   2.5
+ Bates, M.           |     2
+ Andermanthenol, K.  |     4
+
+
+SELECT course.cname, S16.pname FROM course JOIN (SELECT enroll.sid, enroll.cno, enroll.sectno, section.pname FROM enroll JOIN section ON enroll.sectno = section.sectno AND enroll.cno = section.cno AND enroll.dname = section.dname WHERE enroll.sid = 16) S16 ON course.cno = S16.cno GROUP BY course.cname, S16.pname;
+
+          cname           |   pname   
+--------------------------+-----------
+ Intro to Programming     | Jones, J.
+ Intro to Data Structures | Jones, J.
+ Intro to Programming     | Smith, S.
+ Compiler Construction    | Clark, E.
+
+
+SELECT major.dname FROM (SELECT student.sid FROM student WHERE student.age < 19) S19 JOIN major ON S19.sid = major.sid GROUP BY major.dname;
+         dname          
+------------------------
+ Civil Engineering
+ Computer Sciences
+ Mathematics
+ Industrial Engineering
+ Chemical Engineering
+(5 rows)
+
+
+vis15bl=> SELECT enroll.sectno, enroll.cno FROM enroll GROUP BY enroll.dname, enroll.sectno, enroll.cno HAVING count(enroll.sid) < 12;
+ sectno | cno 
+--------+-----
+      1 | 365
+      1 | 461
+      2 | 302
+      1 | 462
+      1 | 302
+      1 | 514
+      1 | 310
+      1 | 375
+      1 | 467
+      1 | 561
+(10 rows)
+
+INSERT INTO prof VALUES ('Benedikt, M.', 'Computer Science');
+
+

@@ -1,0 +1,42 @@
+SELECT Movie.name FROM Casts, Actor, Movie WHERE Actor.fname = 'Tom' AND lname = 'Hanks'AND Actor.id = Casts.pid AND Casts.mid = Movie.id GROUP BY Movie.name;
+
+
+(449 rows)
+
+
+ HashAggregate  (cost=300718.07..300718.13 rows=6 width=17) (actual time=1747.504..1747.544 rows=449 loops=1)
+   Group Key: movie.name
+   ->  Hash Join  (cost=269074.60..300718.06 rows=6 width=17) (actual time=1553.024..1747.209 rows=536 loops=1)
+         Hash Cond: (movie.id = casts.mid)
+         ->  Seq Scan on movie  (cost=0.00..25878.11 rows=1537411 width=21) (actual time=0.041..90.151 rows=1537411 loops=1)
+         ->  Hash  (cost=269074.52..269074.52 rows=6 width=4) (actual time=1552.794..1552.794 rows=536 loops=1)
+               Buckets: 1024  Batches: 1  Memory Usage: 19kB
+               ->  Hash Join  (cost=39911.52..269074.52 rows=6 width=4) (actual time=527.582..1552.736 rows=536 loops=1)
+                     Hash Cond: (casts.pid = actor.id)
+                     ->  Seq Scan on casts  (cost=0.00..186242.50 rows=11445450 width=8) (actual time=0.014..660.124 rows=11445847 loops=1)
+                     ->  Hash  (cost=39911.51..39911.51 rows=1 width=4) (actual time=201.480..201.480 rows=1 loops=1)
+                           Buckets: 1024  Batches: 1  Memory Usage: 1kB
+                           ->  Seq Scan on actor  (cost=0.00..39911.51 rows=1 width=4) (actual time=63.433..201.477 rows=1 loops=1)
+                                 Filter: (((fname)::text = 'Tom'::text) AND ((lname)::text = 'Hanks'::text))
+                                 Rows Removed by Filter: 1865033
+ Planning time: 0.243 ms
+ Execution time: 1747.633 ms
+(17 rows)
+
+ HashAggregate  (cost=71569.84..71569.90 rows=6 width=17) (actual time=399.774..399.818 rows=449 loops=1)
+   Group Key: movie.name
+   ->  Hash Join  (cost=39926.36..71569.82 rows=6 width=17) (actual time=207.493..399.546 rows=536 loops=1)
+         Hash Cond: (movie.id = casts.mid)
+         ->  Seq Scan on movie  (cost=0.00..25878.11 rows=1537411 width=21) (actual time=0.027..87.242 rows=1537411 loops=1)
+         ->  Hash  (cost=39926.29..39926.29 rows=6 width=4) (actual time=207.316..207.316 rows=536 loops=1)
+               Buckets: 1024  Batches: 1  Memory Usage: 19kB
+               ->  Nested Loop  (cost=0.43..39926.29 rows=6 width=4) (actual time=66.240..207.215 rows=536 loops=1)
+                     ->  Seq Scan on actor  (cost=0.00..39911.51 rows=1 width=4) (actual time=66.193..206.942 rows=1 loops=1)
+                           Filter: (((fname)::text = 'Tom'::text) AND ((lname)::text = 'Hanks'::text))
+                           Rows Removed by Filter: 1865033
+                     ->  Index Scan using cid on casts  (cost=0.43..13.00 rows=178 width=8) (actual time=0.040..0.195 rows=536 loops=1)
+                           Index Cond: (pid = actor.id)
+ Planning time: 0.581 ms
+ Execution time: 399.880 ms
+(15 rows)
+
