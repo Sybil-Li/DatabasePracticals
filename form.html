@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>
+Database Access Test - PHP/Postgres
+</title>
+</head>
+<body>
+<h1>
+Database Access Test - PHP/Postgres
+</h1>
+<p>
+<form action="myscript.php" method=post>
+a list of names of students who have taken the course (any section), along with their grades
+<br>
+Enter course number
+<input type=integer name="cno"> (1..104)
+<br>
+<br>
+the names of departments that have one or more students majoring in the department who are under(strictly less than) K years old
+<br>
+Enter age
+<input type=integer name="age"> (1..104)
+<br>
+<br>
+the course and section number of all sections that have less than K students in them
+<br>
+Enter max number
+<input type=integer name="num"> (1..104)
+<br>
+<input type=submit value="Search database">
+<br>
+</form>
+<p>
+<b>Author : </b>
+<a>Hanno Nickau</a>
+</body>
+</html>
+
